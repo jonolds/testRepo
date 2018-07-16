@@ -1,0 +1,33 @@
+#!/bin/bash -e
+
+CMAKE_CONFIG_GENERATOR="Visual Studio 15 2017 Win64"
+
+topDir=$(pwd)
+new_compile=false
+##########make directory structure
+mkdir -p build/smart install/smart
+
+##########clone/update repos
+if [  ! -d "$topDir/pilo"  ]; then
+	git clone https://github.com/jonolds/pilo.git
+	new_compile=true
+else
+	echo "updating pilo..."
+	if [ $(git -C pilo pull) = "Already up to date." ]; then
+		echo "good"
+	else
+		echo "outdated"
+		new_compile=true
+	fi
+fi
+
+if [  ! -d "$topDir/charuco"  ]; then
+	git clone https://github.com/jonolds/charuco.git
+	new_compile=true
+else
+	echo "updating charuco"
+	var=$(git -C charuco pull)
+	echo $var
+fi
+echo $new_compile
+
